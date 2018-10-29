@@ -94,9 +94,9 @@ eccis = list()
 eccs = list()
 for i in range(10):
     puf = random.getrandbits(24)
-    byte1 = i & 0xff;
-    byte2 = (i >> 8) & 0xff
-    byte3 = (i >> 16) & 0xff
+    byte1 = puf & 0xff;
+    byte2 = (puf >> 8) & 0xff
+    byte3 = (puf >> 16) & 0xff
     
     pufbytes = bytearray([byte1,byte2,byte3])
     pufi = bytes3_to_int(pufbytes)
