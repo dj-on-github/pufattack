@@ -10,64 +10,12 @@ from binascii import unhexlify
 import os
 import random
 
-def bytes5_to_int(bytes):
+def bytes_to_int(bytes):
     a = 0
-    a = a + int(bytes[4])
-    a = a << 8
-    a = a + int(bytes[3])
-    a = a << 8
-    a = a + int(bytes[2])
-    a = a << 8
-    a = a + int(bytes[1])
-    a = a << 8
-    a = a + int(bytes[0])
-
+    for x in bytes[::-1]:
+        a = a << 8
+        a = a+int(x)
     return a
-
-def bytes3_to_int(bytes):
-    a = 0
-    a = a + int(bytes[2])
-    a = a << 8
-    a = a + int(bytes[1])
-    a = a << 8
-    a = a + int(bytes[0])
-
-    return a
-
-def long_to_bytes (val, endianness='big'):
-    """
-    Use :ref:`string formatting` and :func:`~binascii.unhexlify` to
-    convert ``val``, a :func:`long`, to a byte :func:`str`.
-
-    :param long val: The value to pack
-
-    :param str endianness: The endianness of the result. ``'big'`` for
-      big-endian, ``'little'`` for little-endian.
-
-    If you want byte- and word-ordering to differ, you're on your own.
-
-    Using :ref:`string formatting` lets us use Python's C innards.
-    """
-
-    # one (1) hex digit per four (4) bits
-    width = val.bit_length()
-
-    # unhexlify wants an even multiple of eight (8) bits, but we don't
-    # want more digits than we need (hence the ternary-ish 'or')
-    width += 8 - ((width % 8) or 8)
-
-    # format width specifier: four (4) bits per hex digit
-    fmt = '%%0%dx' % (width // 4)
-
-    # prepend zero (0) to the width, to zero-pad the output
-    s = unhexlify(fmt % val)
-
-    if endianness == 'little':
-        # see http://stackoverflow.com/a/931095/309233
-        s = s[::-1]
-
-    return s
-    
 
 # Initialize the BCH to BCH(63,24,7)
 bch = bchlib.BCH(0x43,7)
@@ -85,7 +33,7 @@ for i in range(2**24):
     
     bytes = bytearray([byte1, byte2, byte3])
     ecc = bch.encode(bytes)
-    ecci = bytes5_to_int(ecc)
+    ecci = bytes_to_int(ecc)
     
     bchtable[i] = ecci
 
@@ -99,10 +47,10 @@ for i in range(10):
     byte3 = (puf >> 16) & 0xff
     
     pufbytes = bytearray([byte1,byte2,byte3])
-    pufi = bytes3_to_int(pufbytes)
+    pufi = bytes_to_int(pufbytes)
 
     ecc = bch.encode(pufbytes)
-    ecci = bytes5_to_int(ecc) 
+    ecci = bytes_to_int(ecc) 
 
     eccs.append(ecc)
     eccis.append(ecci)
