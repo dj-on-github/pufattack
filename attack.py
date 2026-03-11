@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
-from __future__ import division
+#!/usr/bin/env python3
 
 import bchlib
 import binascii
@@ -18,7 +15,7 @@ def bytes_to_int(bytes):
     return a
 
 # Initialize the BCH to BCH(63,24,7)
-bch = bchlib.BCH(0x43,7)
+bch = bchlib.BCH(t=7, m=6)
 
 # A bch table to look up the ecc
 bchtable = [0 for _ in range(2**24)]
