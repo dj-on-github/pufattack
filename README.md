@@ -12,6 +12,18 @@ This is what the code shows. It makes a random PUF value. Builds the check bits.
 
 The vendor was told and they changed the algorithm.
 
+It requires bchlib. If you don't have that a venv seems to be the best path.
+
+```
+git clone https://github.com/dj-on-github/pufattack
+cd pufattack
+python3 -m venv venv
+source venv/bin/activate
+pip install bchlib
+python3 pufattack
+```
+
+
 An example run:
 
 ```
